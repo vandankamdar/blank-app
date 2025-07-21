@@ -1,3 +1,4 @@
 streamlit
 nsepython
 selenium
+webdriver_manager
