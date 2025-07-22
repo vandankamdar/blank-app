@@ -23,28 +23,40 @@ SYMBOL_FILE = "symbols.txt"
 # Set the page configuration to wide mode
 st.set_page_config(layout="wide")
 
-# Download and set up chromedriver manually (only once)
 CHROMEDRIVER_PATH = "/tmp/chromedriver"
+
 if not os.path.exists(CHROMEDRIVER_PATH):
+    # Download the zip
     subprocess.run([
         "wget", "-q", "-O", "/tmp/chromedriver.zip",
         "https://storage.googleapis.com/chrome-for-testing-public/120.0.6099.224/linux64/chromedriver-linux64.zip"
     ])
+    
+    # Extract to /tmp
     subprocess.run(["unzip", "-q", "/tmp/chromedriver.zip", "-d", "/tmp/"])
-    subprocess.run(["chmod", "+x", "/tmp/chromedriver-linux64/chromedriver"])
-    os.rename("/tmp/chromedriver-linux64/chromedriver", CHROMEDRIVER_PATH)
+    
+    # Move the actual chromedriver binary
+    # New path inside ZIP is likely: /tmp/chromedriver-linux64/chromedriver
+    for root, dirs, files in os.walk("/tmp"):
+        if "chromedriver" in files:
+            actual_driver_path = os.path.join(root, "chromedriver")
+            subprocess.run(["chmod", "+x", actual_driver_path])
+            os.rename(actual_driver_path, CHROMEDRIVER_PATH)
+            break
+    else:
+        raise FileNotFoundError("chromedriver not found after unzipping")
     
 # ------------------------------- Fetch & Clean Symbols -------------------------------
 def scrape_symbols():
     # Set up selenium with the correct chrome/chromedriver paths
+    # Set up headless Chrome
     chrome_options = Options()
     chrome_options.binary_location = "/usr/bin/chromium"
     chrome_options.add_argument("--headless")
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
     
-    service = Service(CHROMEDRIVER_PATH)
-    driver = webdriver.Chrome(service=service, options=chrome_options)
+    driver = webdriver.Chrome(service=Service(CHROMEDRIVER_PATH), options=chrome_options)
     try:
         driver.get("https://zerodha.com/margin-calculator/SPAN/")
         dropdown = WebDriverWait(driver, 10).until(
