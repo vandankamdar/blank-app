@@ -33,18 +33,15 @@ if not os.path.exists(CHROMEDRIVER_PATH):
     ])
     
     # Extract to /tmp
+    # Extract zip
     subprocess.run(["unzip", "-q", "/tmp/chromedriver.zip", "-d", "/tmp/"])
     
-    # Move the actual chromedriver binary
-    # New path inside ZIP is likely: /tmp/chromedriver-linux64/chromedriver
+    # Debug: List contents to find the actual chromedriver path
+    print("🔍 Listing /tmp contents after unzip:")
     for root, dirs, files in os.walk("/tmp"):
-        if "chromedriver" in files:
-            actual_driver_path = os.path.join(root, "chromedriver")
-            subprocess.run(["chmod", "+x", actual_driver_path])
-            os.rename(actual_driver_path, CHROMEDRIVER_PATH)
-            break
-    else:
-        raise FileNotFoundError("chromedriver not found after unzipping")
+        for name in files:
+            print(os.path.join(root, name))
+
     
 # ------------------------------- Fetch & Clean Symbols -------------------------------
 def scrape_symbols():
