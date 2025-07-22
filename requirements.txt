@@ -4,3 +4,4 @@ selenium
 webdriver_manager
 lxml
 chromedriver-autoinstaller
+chromium
