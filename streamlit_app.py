@@ -25,7 +25,7 @@ def scrape_symbols():
     options = Options()
     options.add_argument("--headless")
     options.add_argument("--disable-gpu")
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+    driver = webdriver.Chrome(options=options)
 
     try:
         driver.get("https://zerodha.com/margin-calculator/SPAN/")
