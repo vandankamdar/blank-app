@@ -14,6 +14,7 @@ import pandas as pd
 import time
 import re
 import os
+import undetected_chromedriver as uc
 
 SYMBOL_FILE = "symbols.txt"
 driver_path = ChromeDriverManager().install()
@@ -22,10 +23,9 @@ st.set_page_config(layout="wide")
 
 # ------------------------------- Fetch & Clean Symbols -------------------------------
 def scrape_symbols():
-    options = Options()
-    options.add_argument("--headless=new")
-    options.add_argument("--disable-gpu")
-    driver = webdriver.Chrome(options=options)
+    options = uc.ChromeOptions()
+    options.headless = True  # important for Streamlit Cloud
+    driver = uc.Chrome(options=options)
 
     try:
         driver.get("https://zerodha.com/margin-calculator/SPAN/")
