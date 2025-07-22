@@ -3,4 +3,4 @@ nsepython
 selenium
 webdriver_manager
 lxml
-undetected-chromedriver
+chromedriver-autoinstaller
