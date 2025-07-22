@@ -23,7 +23,7 @@ st.set_page_config(layout="wide")
 # ------------------------------- Fetch & Clean Symbols -------------------------------
 def scrape_symbols():
     options = Options()
-    options.add_argument("--headless")
+    options.add_argument("--headless=new")
     options.add_argument("--disable-gpu")
     driver = webdriver.Chrome(options=options)
 
