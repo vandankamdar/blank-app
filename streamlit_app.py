@@ -14,23 +14,36 @@ import pandas as pd
 import time
 import re
 import os
+import subprocess
 import chromedriver_autoinstaller
 
 
 SYMBOL_FILE = "symbols.txt"
-driver_path = ChromeDriverManager().install()
+
 # Set the page configuration to wide mode
 st.set_page_config(layout="wide")
 
+# Download and set up chromedriver manually (only once)
+CHROMEDRIVER_PATH = "/tmp/chromedriver"
+if not os.path.exists(CHROMEDRIVER_PATH):
+    subprocess.run([
+        "wget", "-q", "-O", "/tmp/chromedriver.zip",
+        "https://storage.googleapis.com/chrome-for-testing-public/124.0.6367.91/linux64/chromedriver-linux64.zip"
+    ])
+    subprocess.run(["unzip", "-q", "/tmp/chromedriver.zip", "-d", "/tmp/"])
+    subprocess.run(["chmod", "+x", "/tmp/chromedriver-linux64/chromedriver"])
+    os.rename("/tmp/chromedriver-linux64/chromedriver", CHROMEDRIVER_PATH)
+    
 # ------------------------------- Fetch & Clean Symbols -------------------------------
 def scrape_symbols():
+    # Set up selenium with the correct chrome/chromedriver paths
     chrome_options = Options()
     chrome_options.binary_location = "/usr/bin/chromium"
     chrome_options.add_argument("--headless")
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
     
-    service = Service("/usr/bin/chromedriver")  # use system-installed chromedriver
+    service = Service(CHROMEDRIVER_PATH)
     driver = webdriver.Chrome(service=service, options=chrome_options)
     try:
         driver.get("https://zerodha.com/margin-calculator/SPAN/")
