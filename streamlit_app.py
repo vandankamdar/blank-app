@@ -28,7 +28,7 @@ CHROMEDRIVER_PATH = "/tmp/chromedriver"
 if not os.path.exists(CHROMEDRIVER_PATH):
     subprocess.run([
         "wget", "-q", "-O", "/tmp/chromedriver.zip",
-        "https://storage.googleapis.com/chrome-for-testing-public/124.0.6367.91/linux64/chromedriver-linux64.zip"
+        "https://storage.googleapis.com/chrome-for-testing-public/120.0.6099.224/linux64/chromedriver-linux64.zip"
     ])
     subprocess.run(["unzip", "-q", "/tmp/chromedriver.zip", "-d", "/tmp/"])
     subprocess.run(["chmod", "+x", "/tmp/chromedriver-linux64/chromedriver"])
