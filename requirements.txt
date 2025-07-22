@@ -2,3 +2,5 @@ streamlit
 nsepython
 selenium
 webdriver_manager
+lxml
+libglib2.0-0=2.50.3-2
