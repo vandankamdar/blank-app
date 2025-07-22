@@ -3,4 +3,3 @@ nsepython
 selenium
 webdriver_manager
 lxml
-libglib2.0-0
