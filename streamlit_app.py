@@ -24,13 +24,12 @@ st.set_page_config(layout="wide")
 
 # ------------------------------- Fetch & Clean Symbols -------------------------------
 def scrape_symbols():
-    chromedriver_autoinstaller.install()
-
     options = webdriver.ChromeOptions()
+    options.binary_location = "/usr/bin/chromium-browser"  # Streamlit's default Chromium path
     options.add_argument('--headless')
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
-
+    
     driver = webdriver.Chrome(options=options)
 
     try:
