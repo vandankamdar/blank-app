@@ -24,14 +24,14 @@ st.set_page_config(layout="wide")
 
 # ------------------------------- Fetch & Clean Symbols -------------------------------
 def scrape_symbols():
-    options = webdriver.ChromeOptions()
-    options.binary_location = "/usr/bin/chromium-browser"  # Streamlit's default Chromium path
-    options.add_argument('--headless')
-    options.add_argument('--no-sandbox')
-    options.add_argument('--disable-dev-shm-usage')
+    chrome_options = Options()
+    chrome_options.binary_location = "/usr/bin/chromium"
+    chrome_options.add_argument("--headless")
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--disable-dev-shm-usage")
     
-    driver = webdriver.Chrome(options=options)
-
+    service = Service("/usr/bin/chromedriver")  # use system-installed chromedriver
+    driver = webdriver.Chrome(service=service, options=chrome_options)
     try:
         driver.get("https://zerodha.com/margin-calculator/SPAN/")
         dropdown = WebDriverWait(driver, 10).until(
